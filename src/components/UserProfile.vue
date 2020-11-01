@@ -1,17 +1,29 @@
 <template>
     <div class="user-profile">
         <div class="user-profile_user-panel">
-            <h1 class="user-profile_username">{{user.username}}</h1>
+            <h1 class="user-profile_username">@{{user.username}}</h1>
+            <div class="user-profile_admin-badge" v-if="user.isAdmin">Admin</div>
+            <div class="user-profile_admin-badge" v-else>Not Admin</div>
             <div class="user-profile_follower-count">
                 <strong>Followers: </strong> {{followers}}
             </div>
+        </div>
+        <div class="user-profile_twoots-wrapper">
+            <TwootItem
+                v-for="twoot in user.twoots"
+                :key="twoot.id"
+                :username="user.username"
+                :twoot="twoot"
+                @favourite="toggleFavourite"/>
         </div>
     </div>
 </template>
 
 <script>
+    import TwootItem from "./TwootItem";
     export default {
         name: "UserProfile",
+        components: {TwootItem},
         data(){
             return{
                 followers: 0,
@@ -21,7 +33,11 @@
                     firstname: 'Brandon Lee',
                     lastname: 'Naidoo',
                     email: 'brandon.naidoo@dimensiondata.com',
-                    isAdmin: true
+                    isAdmin: true,
+                    twoots: [
+                        {id: 1, content: 'Twotter is amazing!'},
+                        {id: 2, content: "Don't forget to subscribe to The Earth is Square!"}
+                    ]
                 }
             }
         },
@@ -41,6 +57,9 @@
         methods:{
             followUser() {
                 this.followers++;
+            },
+            toggleFavourite(id){
+             console.log(`Favourited Tweet #${id}`);
             }
         },
         mounted() {
@@ -69,6 +88,16 @@
 
     h1{
         margin: 0;
+    }
+
+    .user-profile_admin-badge
+    {
+        background: rebeccapurple;
+        color: white;
+        border-radius: 5px;
+        margin-right: auto;
+        padding: 0 10px;
+        font-weight: bold;
     }
 
 </style>
