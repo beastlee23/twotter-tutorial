@@ -7,8 +7,8 @@
             <div class="user-profile_follower-count">
                 <strong>Followers: </strong> {{followers}}
             </div>
-            <form class="user-profile_create-twoot" @submit.prevent="createNewTwoot">
-                <label for="newTwoot"><strong>New Twoot</strong></label>
+            <form class="user-profile_create-twoot" @submit.prevent="createNewTwoot" :class="{'--exceeded': newTwootCharacterCount > 180}">
+                <label for="newTwoot"><strong>New Twoot</strong>({{newTwootCharacterCount}}/180)</label>
                 <textarea id="newTwoot" rows="4" v-model="newTwootContent"></textarea>
                 <div class="user-profile_create-twoot-type">
                     <label for="newTwootType"><strong>Type:</strong></label>
@@ -75,6 +75,9 @@
         computed: {
             fullname() {
                 return `${this.user.firstname} ${this.user.lastname}`;
+            },
+            newTwootCharacterCount() {
+                return this.newTwootContent.length;
             }
         },
         methods:{
@@ -101,7 +104,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .user-profile{
         display: grid;
         grid-template-columns: 1fr 3fr;
@@ -117,10 +120,7 @@
         background-color: white;
         border-radius: 5px;
         border: 1px solid #DFE3E8;
-    }
 
-    h1{
-        margin: 0;
     }
 
     .user-profile_admin-badge
@@ -134,11 +134,24 @@
         margin-bottom: 20px;
     }
 
+    h1{
+        margin: 0;
+    }
+
     .user-profile_create-twoot{
         border-top: 1px solid #DFE3E8;
         padding-top: 20px;
         display: flex;
         flex-direction: column;
+    }
+
+    .--exceeded{
+        color: red;
+        border-color: red;
+    }
+
+    button{
+        background-color: red;
     }
 
 </style>
